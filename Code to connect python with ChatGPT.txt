@@ -1,0 +1,40 @@
+Code to connect python with ChatGPT
+
+
+
+
+import requests
+import json
+
+def callChatGPTAPI(prompt):
+    openai_api_key = 'YOUR-API-KEY   '#make sure to add your API before running this key
+    url = 'https://api.openai.com/v1/engines/text-davinci-002/completions'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + openai_api_key
+    }
+    data = {
+        'prompt': prompt,
+        'max_tokens': 1024,
+        'temperature': 0.7,
+        'top_p': 1.0,
+        'frequency_penalty': 0.0,
+        'presence_penalty': 0.0
+    }
+    response = requests.post(url, headers=headers, json=data)
+    response_json = response.json()
+    #print(response_json) 
+    #choices = response_json.get('choices', [])
+    choices = response_json.get('choices', [])
+    #print(choices)
+    if choices:
+        message = choices[0]['text'].strip()
+    else:
+        message = "No response from the ChatGPT model"
+    return message
+
+# Call the query_chatgpt function
+Query = input("Enter your query: ")
+result = callChatGPTAPI(Query)
+print(result)
+
